@@ -1,0 +1,17 @@
+logging:
+  level:
+    '[org.springframework]': INFO
+    '[org.springframework.orm.jpa.support]': DEBUG}
+    '[spring.jpa]': DEBUG
+
+spring:
+  application:
+    name: "api"
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/database_tasks_kotlin
+    username: postgres
+    password: postgres
+  flyway:
+    driver-class-name: org.postgresql.Driver
+    schemas: database_tasks_kotlin
