@@ -7,6 +7,9 @@ logging:
 spring:
   application:
     name: "api"
+  jpa:
+    hibernate:
+      ddl-auto: update
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/database_tasks_kotlin
