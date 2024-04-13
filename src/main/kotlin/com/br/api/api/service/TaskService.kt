@@ -1,6 +1,6 @@
 package com.br.api.api.service
 import com.br.api.api.dtos.TaskDto
-import com.br.api.api.entity.Task
+import com.br.api.api.entity.TaskEntity
 import com.br.api.api.enumeration.TaskExceptionType
 import com.br.api.api.exception.TaskException
 import com.br.api.api.repository.TaskRepository
@@ -10,7 +10,7 @@ import java.util.UUID
 
 @Service
 class TaskService(private val taskRepository: TaskRepository) {
-    fun createTask(taskDto: TaskDto): Task {
+    fun createTask(taskDto: TaskDto): TaskEntity {
         try {
             return savedTask(taskDto)
         } catch (ex: Exception) {
@@ -19,20 +19,20 @@ class TaskService(private val taskRepository: TaskRepository) {
     }
 
     @Transactional
-    private fun savedTask(taskDto: TaskDto) : Task {
-        val newTask = Task(taskDto.title, taskDto.description, taskDto.priority)
+    private fun savedTask(taskDto: TaskDto) : TaskEntity {
+        val newTask = TaskEntity(taskDto.title, taskDto.description, taskDto.priority)
         return taskRepository.save(newTask)
     }
 
-    fun getTaskById(id: UUID): Task? {
+    fun getTaskById(id: UUID): TaskEntity? {
         return taskRepository.findById(id).orElse(null)
     }
 
-    fun getAllTasks(): List<Task> {
+    fun getAllTasks(): List<TaskEntity> {
         return taskRepository.findAll()
     }
 
-    fun updateTask(id: UUID, updatedTask: Task): Task? {
+    fun updateTask(id: UUID, updatedTask: TaskEntity): TaskEntity? {
         val existingTask = getTaskById(id)
         if (existingTask != null) {
             updatedTask.id = existingTask.id

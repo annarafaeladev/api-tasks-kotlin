@@ -5,10 +5,10 @@ import java.util.UUID
 
 @Entity
 @Table(name = "tasks")
-class Task(
-    var title: String = "",
-    var description: String? = null,
-    var priority: Int = 1
+class TaskEntity(
+    private var title: String,
+    private var description: String? = null,
+    private var priority: Int = 1
 ) {
 
     @Id

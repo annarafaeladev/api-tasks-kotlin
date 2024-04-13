@@ -2,7 +2,7 @@ package com.br.api.api.controller
 
 import com.br.api.api.dtos.TaskDto
 import com.br.api.api.dtos.response.Response
-import com.br.api.api.entity.Task
+import com.br.api.api.entity.TaskEntity
 import com.br.api.api.service.TaskService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -16,8 +16,8 @@ import java.util.*
 class TaskController(private val taskService: TaskService) {
 
     @PostMapping
-    fun createTask(@Valid @RequestBody taskDto: TaskDto, result: BindingResult): ResponseEntity<Response<Task>> {
-        val response: Response<Task> = Response();
+    fun createTask(@Valid @RequestBody taskDto: TaskDto, result: BindingResult): ResponseEntity<Response<TaskEntity>> {
+        val response: Response<TaskEntity> = Response()
 
         if (result.hasErrors()) {
             result.allErrors.forEach { error ->
@@ -32,17 +32,17 @@ class TaskController(private val taskService: TaskService) {
     }
 
     @GetMapping("/{id}")
-    fun getTaskById(@PathVariable id: UUID): Task? {
+    fun getTaskById(@PathVariable id: UUID): TaskEntity? {
         return taskService.getTaskById(id)
     }
 
     @GetMapping
-    fun getAllTasks(): List<Task> {
+    fun getAllTasks(): List<TaskEntity> {
         return taskService.getAllTasks()
     }
 
     @PutMapping("/{id}")
-    fun updateTask(@PathVariable id: UUID, @RequestBody updatedTask: Task): Task? {
+    fun updateTask(@PathVariable id: UUID, @RequestBody updatedTask: TaskEntity): TaskEntity? {
         return taskService.updateTask(id, updatedTask)
     }
 
