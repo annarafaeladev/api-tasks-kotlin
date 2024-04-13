@@ -1,7 +1,14 @@
 package com.br.api.api.controller
 
+import com.br.api.api.dtos.TaskDto
+import com.br.api.api.dtos.response.Response
 import com.br.api.api.entity.Task
 import com.br.api.api.service.TaskService
+import jakarta.validation.Valid
+import org.jetbrains.annotations.NotNull
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -10,8 +17,22 @@ import java.util.*
 class TaskController(private val taskService: TaskService) {
 
     @PostMapping
-    fun createTask(@RequestBody task: Task): Task {
-        return taskService.saveTask(task)
+    fun createTask(@NotNull @Valid @RequestBody taskDto: TaskDto, result: BindingResult): ResponseEntity<Response<Task>> {
+        var response: Response<Task> = Response();
+
+        if (result.hasErrors()) {
+            result.allErrors.forEach { error ->
+                response.addErrorMsgToResponse(error.defaultMessage ?: "Erro de validação")
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response)
+        }
+
+        val savedTask = taskService.createTask(taskDto)
+
+        response.data = savedTask
+        response.errors = null
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
 
     @GetMapping("/{id}")
