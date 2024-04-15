@@ -1,4 +1,4 @@
-package com.br.api.api.dtos.response
+package com.br.api.api.domain.dtos.response
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import org.jetbrains.annotations.NotNull
@@ -8,5 +8,5 @@ import java.time.LocalDateTime
 data class ResponseError(
     @field:NotNull("Details cannot be null")
     var details: String,
-    val timestamp: LocalDateTime,
+    val timestamp: LocalDateTime = LocalDateTime.now(),
 )

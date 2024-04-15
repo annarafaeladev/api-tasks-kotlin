@@ -1,6 +1,6 @@
 package com.br.api.api.service
-import com.br.api.api.dtos.TaskDto
-import com.br.api.api.entity.TaskEntity
+import com.br.api.api.domain.dtos.TaskDto
+import com.br.api.api.domain.entity.TaskEntity
 import com.br.api.api.enumeration.TaskExceptionType
 import com.br.api.api.exception.TaskException
 import com.br.api.api.repository.TaskRepository

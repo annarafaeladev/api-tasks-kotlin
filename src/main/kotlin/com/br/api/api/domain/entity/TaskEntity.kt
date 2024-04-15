@@ -1,4 +1,4 @@
-package com.br.api.api.entity
+package com.br.api.api.domain.entity
 
 import jakarta.persistence.*
 import java.util.UUID
@@ -6,9 +6,9 @@ import java.util.UUID
 @Entity
 @Table(name = "tasks")
 class TaskEntity(
-    private var title: String,
-    private var description: String? = null,
-    private var priority: Int = 1
+    var title: String,
+    var description: String? = null,
+    var priority: Int = 1
 ) {
 
     @Id

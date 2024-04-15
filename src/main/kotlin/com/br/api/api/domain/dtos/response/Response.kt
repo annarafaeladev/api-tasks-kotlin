@@ -1,4 +1,4 @@
-package com.br.api.api.dtos.response
+package com.br.api.api.domain.dtos.response
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import java.time.LocalDateTime
@@ -9,7 +9,7 @@ data class Response<T>(
     var errors: Any? = null,
 ) {
     fun addErrorMsgToResponse(msgError: String) {
-        val error = ResponseError(msgError, LocalDateTime.now())
+        val error = ResponseError(msgError)
         errors = error
     }
 }
