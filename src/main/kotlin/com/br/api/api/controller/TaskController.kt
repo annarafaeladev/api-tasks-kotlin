@@ -1,6 +1,7 @@
 package com.br.api.api.controller
 
 import com.br.api.api.domain.dtos.TaskDto
+import com.br.api.api.domain.dtos.TaskUpdateDto
 import com.br.api.api.domain.dtos.response.Response
 import com.br.api.api.domain.entity.TaskEntity
 import com.br.api.api.exception.BindingResultException
@@ -39,12 +40,15 @@ class TaskController(private val taskService: TaskService) {
     }
 
     @PutMapping("/{id}")
-    fun updateTask(@PathVariable id: UUID, @RequestBody updatedTask: TaskEntity): TaskEntity? {
-        return taskService.updateTask(id, updatedTask)
+    fun updateTask(@PathVariable(name = "id") id: UUID, @RequestBody updatedTask: TaskUpdateDto): ResponseEntity<Any> {
+
+
+        return ResponseEntity.ok(taskService.updateTask(id, updatedTask))
     }
 
     @DeleteMapping("/{id}")
-    fun deleteTask(@PathVariable id: UUID) {
+    fun deleteTask(@PathVariable id: UUID): ResponseEntity<Any> {
         taskService.deleteTask(id)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null)
     }
 }
