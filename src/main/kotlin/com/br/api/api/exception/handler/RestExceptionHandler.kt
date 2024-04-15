@@ -1,8 +1,9 @@
-package com.br.api.api.exception
+package com.br.api.api.exception.handler
 
 import com.br.api.api.domain.dtos.response.Response
 import com.br.api.api.domain.dtos.response.ResponseError
 import com.br.api.api.enumeration.TaskExceptionType
+import com.br.api.api.exception.BindingResultException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -20,7 +21,7 @@ class RestExceptionHandler {
     }
 
     @ExceptionHandler(BindingResultException::class)
-    fun handleHttpMessageNotReadableException(e: BindingResultException): ResponseEntity<Any> {
+    fun handleBindingResultException(e: BindingResultException): ResponseEntity<Any> {
         val response: Response<ResponseError> = Response()
         response.addErrorMsgToResponse(e.handleErrors())
         return ResponseEntity(response, HttpStatus.BAD_REQUEST)
