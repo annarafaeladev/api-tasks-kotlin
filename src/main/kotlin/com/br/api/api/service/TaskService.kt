@@ -27,13 +27,7 @@ class TaskService(private val taskRepository: TaskRepository) : TaskHandler {
 
 
     override fun getTaskById(id: UUID): TaskEntity {
-        val taskEntityOptional = taskRepository.findById(id)
-
-        if (taskEntityOptional.isEmpty) {
-            throw TaskNotFoundException(id)
-        }
-
-        return taskEntityOptional.get()
+       return  taskRepository.findById(id).orElseThrow { TaskNotFoundException(id) }
     }
 
     override fun getAllTasks(): List<TaskEntity> {
