@@ -7,14 +7,15 @@ import com.br.api.api.enumeration.TaskExceptionType
 import com.br.api.api.exception.RetrievalTaskListException
 import com.br.api.api.exception.TaskException
 import com.br.api.api.exception.TaskNotFoundException
+import com.br.api.api.interfaces.TaskHandler
 import com.br.api.api.repository.TaskRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class TaskService(private val taskRepository: TaskRepository) {
-    fun createTask(taskDto: TaskDto): TaskEntity {
+class TaskService(private val taskRepository: TaskRepository) : TaskHandler {
+    override fun createTask(taskDto: TaskDto): TaskEntity {
         try {
             val newTask = TaskEntity(taskDto.title, taskDto.description, taskDto.priority)
 
@@ -25,7 +26,7 @@ class TaskService(private val taskRepository: TaskRepository) {
     }
 
 
-    fun getTaskById(id: UUID): TaskEntity {
+    override fun getTaskById(id: UUID): TaskEntity {
         val taskEntityOptional = taskRepository.findById(id)
 
         if (taskEntityOptional.isEmpty) {
@@ -35,7 +36,7 @@ class TaskService(private val taskRepository: TaskRepository) {
         return taskEntityOptional.get()
     }
 
-    fun getAllTasks(): List<TaskEntity> {
+    override fun getAllTasks(): List<TaskEntity> {
         try {
             return taskRepository.findAll()
         } catch (ex: Exception) {
@@ -43,7 +44,7 @@ class TaskService(private val taskRepository: TaskRepository) {
         }
     }
 
-    fun updateTask(id: UUID, updatedTask: TaskUpdateDto): TaskEntity {
+    override fun updateTask(id: UUID, updatedTask: TaskUpdateDto): TaskEntity {
         try {
             val taskEntity = getTaskById(id)
 
@@ -55,17 +56,16 @@ class TaskService(private val taskRepository: TaskRepository) {
         }
     }
 
+    override fun deleteTask(id: UUID) {
+        val taskEntity = getTaskById(id)
+
+        taskRepository.deleteById(taskEntity.id)
+    }
+
     private fun updateFields(entity: TaskEntity, updatedTask: TaskUpdateDto) {
         updatedTask.title?.let { entity.title = it }
         updatedTask.description?.let { entity.description = it }
         updatedTask.priority?.let { entity.priority = it }
-    }
-
-
-    fun deleteTask(id: UUID) {
-        val taskEntity = getTaskById(id)
-
-        taskRepository.deleteById(taskEntity.id)
     }
 
     @Transactional
