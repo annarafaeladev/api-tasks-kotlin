@@ -5,7 +5,6 @@ import com.br.api.api.domain.dtos.response.ResponseError
 import com.br.api.api.enumeration.TaskExceptionType
 import com.br.api.api.exception.BindingResultException
 import com.br.api.api.exception.TaskNotFoundException
-import com.br.api.api.exception.TaskUUIDInvalidException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -44,12 +43,6 @@ class RestExceptionHandler {
     fun handleTaskNotFoundException(e: TaskNotFoundException): ResponseEntity<Any> {
         val buildResponseError = buildResponseError(TaskExceptionType.TASK_NOT_FOUND.message)
         return ResponseEntity(buildResponseError, HttpStatus.NOT_FOUND)
-    }
-
-    @ExceptionHandler(TaskUUIDInvalidException::class)
-    fun handleTaskUUIDInvalidException(e: TaskUUIDInvalidException): ResponseEntity<Any> {
-        val buildResponseError = buildResponseError(TaskExceptionType.TASK_NOT_FOUND.message)
-        return ResponseEntity(buildResponseError, HttpStatus.BAD_REQUEST)
     }
 
 
