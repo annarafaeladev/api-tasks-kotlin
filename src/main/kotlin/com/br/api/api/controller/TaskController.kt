@@ -5,8 +5,10 @@ import com.br.api.api.domain.dtos.TaskUpdateDto
 import com.br.api.api.domain.dtos.response.Response
 import com.br.api.api.domain.entity.TaskEntity
 import com.br.api.api.exception.BindingResultException
+import com.br.api.api.service.CacheService
 import com.br.api.api.service.TaskService
 import jakarta.validation.Valid
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
@@ -15,7 +17,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/tasks")
-class TaskController(private val taskService: TaskService) {
+class TaskController(private val taskService: TaskService, private val cacheService: CacheService) {
 
     @PostMapping
     fun createTask(@Valid @RequestBody taskDto: TaskDto, result: BindingResult): ResponseEntity<Response<TaskEntity>> {
@@ -30,25 +32,29 @@ class TaskController(private val taskService: TaskService) {
     }
 
     @GetMapping("/{id}")
-    fun getTaskById(@PathVariable id: UUID): TaskEntity? {
-        return taskService.getTaskById(id)
+    fun getTaskById(@PathVariable id: UUID): ResponseEntity<TaskEntity?> {
+        return ResponseEntity.ok(taskService.getTaskById(id))
     }
 
     @GetMapping
-    fun getAllTasks(): List<TaskEntity> {
-        return taskService.getAllTasks()
+    @Cacheable("allTasks")
+    fun getAllTasks(): ResponseEntity<List<TaskEntity>> {
+        return ResponseEntity.ok(taskService.getAllTasks());
     }
 
     @PutMapping("/{id}")
     fun updateTask(@PathVariable(name = "id") id: UUID, @RequestBody updatedTask: TaskUpdateDto): ResponseEntity<Any> {
+        val task = taskService.updateTask(id, updatedTask)
+        cacheService.clearTaskCache()
 
-
-        return ResponseEntity.ok(taskService.updateTask(id, updatedTask))
+        return ResponseEntity.ok(task)
     }
 
     @DeleteMapping("/{id}")
     fun deleteTask(@PathVariable id: UUID): ResponseEntity<Any> {
         taskService.deleteTask(id)
+        cacheService.clearTaskCache()
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null)
     }
 }
