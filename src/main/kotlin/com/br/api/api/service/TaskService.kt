@@ -64,6 +64,6 @@ class TaskService(private val taskRepository: TaskRepository) : TaskHandler {
 
     @Transactional
     private fun savedTask(task: TaskEntity): TaskEntity {
-        return taskRepository.save(task)
+        return taskRepository.saveAndFlush(task)
     }
 }

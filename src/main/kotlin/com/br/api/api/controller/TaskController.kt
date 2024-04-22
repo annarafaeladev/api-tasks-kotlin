@@ -26,6 +26,7 @@ class TaskController(private val taskService: TaskService, private val cacheServ
             throw BindingResultException(result)
         }
 
+        cacheService.clearTaskCache()
         val response: Response<TaskEntity> = Response(taskService.createTask(taskDto))
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response)

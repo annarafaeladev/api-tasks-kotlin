@@ -12,9 +12,9 @@ spring:
       ddl-auto: update
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/database_tasks_kotlin
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgres
   flyway:
     driver-class-name: org.postgresql.Driver
-    schemas: database_tasks_kotlin
+    schemas: postgres
